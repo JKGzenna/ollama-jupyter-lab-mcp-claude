@@ -1,12 +1,3 @@
-# CHECKPOINTS
-*.ipynb_checkpoints
-
-# PERRSONAL API KEYS
-.env
-
-# JUPYTER RECYCLE BIN
-.Trash-0
-
 # Github's default gitignore for Python
 
 # Byte-compiled / optimized / DLL files
