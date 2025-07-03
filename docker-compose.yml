@@ -68,17 +68,14 @@ services:
 networks:
   # HOST NETWORK 
   #host:
-
   # BRIDGE NETWORK
   ollama-jupyter-net:
     driver: bridge
-
 volumes:
   storage:
-  
+
   # VOLUME FOR ALL OLLAMA ENVIRONMENTS
   ollama:
-
   # JUPYTER PRODUCTION STORAGE
   #workspace:
 
