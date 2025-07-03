@@ -1,0 +1,30 @@
+{
+    "mcpServers": {
+        "jupyter": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "ROOM_URL",
+                "-e",
+                "ROOM_TOKEN",
+                "-e",
+                "ROOM_ID",
+                "-e",
+                "RUNTIME_URL",
+                "-e",
+                "RUNTIME_TOKEN",
+                "datalayer/jupyter-mcp-server:latest"
+            ],
+            "env": {
+                "ROOM_URL": "http://host.docker.internal:8888",
+                "ROOM_TOKEN": "",
+                "ROOM_ID": "notebook.ipynb",
+                "RUNTIME_URL": "http://host.docker.internal:8888",
+                "RUNTIME_TOKEN": ""
+            }
+        }
+    }
+}
