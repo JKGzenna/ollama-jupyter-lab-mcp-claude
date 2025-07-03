@@ -1,0 +1,81 @@
+services:
+
+  ollama:
+    container_name: ollama
+    image: ollama/ollama
+    # HOST NETWORK
+    #network_mode: host
+    # BRIDGE NETWORK
+    ports:
+      - "11434:11434"
+    networks:
+      - ollama-jupyter-net
+    # VOLUME FOR ALL ENVIRONMENTS
+    volumes:
+      - ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  jupyter:
+    container_name: jupyter
+    build:
+      context: .
+      dockerfile: Dockerfile.jupyter
+    # HOST NETWORK
+    #network_mode: host
+    # BRIDGE NETWORK
+    ports:
+      - "8888:8888"
+    networks:
+      - ollama-jupyter-net
+    volumes:
+      # DEV/PRE STORAGE
+      - ./workspace:/home/jovyan
+      # PRODUCTION STORAGE
+      #- workspace:/home/jovyan
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    command: >
+      bash -c "
+        jupyter lab
+        --collaborative 
+        --ip=0.0.0.0 
+        --port=8888 
+        --no-browser 
+        --ServerApp.disable_check_xsrf=True
+        --ServerApp.allow_origin='*'
+        --ServerApp.allow_remote_access=True
+        --NotebookApp.token=''
+        --NotebookApp.password=''
+        --ServerApp.token=''
+        --ServerApp.password=''
+      "
+    restart: unless-stopped
+    # BRIDGE NETWORK
+    depends_on:
+      - ollama
+
+networks:
+  # HOST NETWORK 
+  #host:
+
+  # BRIDGE NETWORK
+  ollama-jupyter-net:
+    driver: bridge
+
+volumes:
+  storage:
+  
+  # VOLUME FOR ALL OLLAMA ENVIRONMENTS
+  ollama:
+
+  # JUPYTER PRODUCTION STORAGE
+  #workspace:
+
+    driver: local
