@@ -24,9 +24,12 @@ services:
 
   jupyter:
     container_name: jupyter
+    # No definimos una imagen cerrada para que en cada build pueda tomar la última
+    # imagen base de 'jupyter/scipy-notebook:latest' junto con nuestras configuraciones,
+    # y de ese modo, evitamos que se quede desfasado e inseguro en el tiempo.
     build:
       context: .
-      dockerfile: Dockerfile.jupyter
+      dockerfile: Dockerfile
     # HOST NETWORK
     #network_mode: host
     # BRIDGE NETWORK
@@ -48,13 +51,14 @@ services:
         --ip=0.0.0.0 
         --port=8888 
         --no-browser 
-        --ServerApp.disable_check_xsrf=True
         --ServerApp.allow_origin='*'
+        --ServerApp.disable_check_xsrf=True
         --ServerApp.allow_remote_access=True
-        --NotebookApp.token=''
-        --NotebookApp.password=''
         --ServerApp.token=''
         --ServerApp.password=''
+        --ServerApp.password_required = False
+        --NotebookApp.token=''
+        --NotebookApp.password=''
       "
     restart: unless-stopped
     # BRIDGE NETWORK
